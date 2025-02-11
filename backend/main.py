@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Date, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Date
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from passlib.context import CryptContext
@@ -30,7 +30,6 @@ Base = declarative_base()
 token_secret = "chave_secreta"
 token_algorithm = "HS256"
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 # Definindo o OAuth2
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -94,13 +93,20 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
 # Criar usuário (registro)
 @app.post("/register/")
 def register(username: str, password: str, role: str, db: Session = Depends(get_db)):
+    # Verifica se o usuário já existe
     usuario_existente = db.query(User).filter(User.username == username).first()
     if usuario_existente:
         raise HTTPException(status_code=400, detail="Usuário já existe")
+
+    # Verifica se o papel ('role') é válido
+    if role not in ["inquilino", "senhorio"]:
+        raise HTTPException(status_code=400, detail="Papel inválido. Escolha 'inquilino' ou 'senhorio'.")
+
     usuario = User(username=username, password_hash=hash_senha(password), role=role)
     db.add(usuario)
     db.commit()
-    return {"msg": "Usuário criado com sucesso"}
+    db.refresh(usuario)
+    return {"msg": "Usuário criado com sucesso", "user_id": usuario.id}
 
 # Login e geração de token
 @app.post("/login/")
@@ -118,11 +124,12 @@ def criar_conta(descricao: str, valor: int, vencimento: str, inquilino_id: int, 
     try:
         vencimento_date = datetime.strptime(vencimento, "%Y-%m-%d").date()
     except ValueError:
-        raise HTTPException(status_code=400, detail="Formato de vencimento inválido, use YYYY-MM-DD")
+        raise HTTPException(status_code=400, detail="Formato de vencimento inválido, use o formato 'YYYY-MM-DD'")
     
     conta = Conta(descricao=descricao, valor=valor, vencimento=vencimento_date, inquilino_id=inquilino_id)
     db.add(conta)
     db.commit()
+    db.refresh(conta)
     return {"msg": "Conta criada com sucesso", "conta_id": conta.id}
 
 # Listar contas pendentes
