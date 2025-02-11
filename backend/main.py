@@ -1,16 +1,28 @@
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Date, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import jwt
 import os
 
+app = FastAPI()
+
+# Adiciona o Middleware de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite todos os domínios (para testes)
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos os headers
+)
+
 # Configuração do banco de dados MySQL
-DATABASE_URL = "mysql+pymysql://root:300275609aB@@localhost/arrendafacil"
-engine = create_engine(DATABASE_URL)
+DATABASE_URL = "mysql+pymysql://root@localhost/arrendafacil"
+engine = create_engine('mysql+pymysql://root@localhost/arrendafacil')
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()       
 
@@ -18,7 +30,7 @@ Base = declarative_base()
 token_secret = "chave_secreta"
 token_algorithm = "HS256"
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-app = FastAPI()
+
 
 # Definindo o OAuth2
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")

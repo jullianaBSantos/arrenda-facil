@@ -1,140 +1,140 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Contas</title>
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Contas</title>
+    </head>
+    <body>
 
-    <div class="container">
-        <div class="container__informacoes">
-            <h1>Minhas Contas</h1>
-            <p>Aqui estão as suas contas pendentes e já pagas.</p>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Vencimento</th>
-                        <th>Status</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="contas-list">
-                    <!-- As contas serão inseridas aqui dinamicamente -->
-                </tbody>
-            </table>
-
-            <div class="container__botoes">
-                <button class="container__botao" id="baixar-comprovantes">Baixar Comprovantes</button>
-            </div>
-
-            <!-- Formulário de upload de comprovante -->
-            <div id="comprovante-upload" style="display:none;">
-                <h2>Enviar Comprovante de Pagamento</h2>
-                <input type="file" id="comprovante-file" accept="application/pdf">
-                <button class="container__botao" onclick="enviarComprovante()">Enviar Comprovante</button>
-                <p id="comprovante-status" style="color: green;"></p>
-            </div>
-        </div>
-
-        <div class="container__imagem">
-            <img src="img/ia.png" alt="Imagem de IA" class="container__imagem-pessoa" />
-        </div>
-    </div>
-
-    <script>
-        // Simulação de dados do backend (deve vir da API)
-        const contas = [
-            {
-                id: 1,
-                descricao: "Conta de luz",
-                valor: 100,
-                vencimento: "2025-02-10",
-                paga: false
-            },
-            {
-                id: 2,
-                descricao: "Conta de água",
-                valor: 50,
-                vencimento: "2025-02-12",
-                paga: true
-            }
-        ];
-
-        // Função para atualizar a lista de contas
-        function atualizarContas() {
-            const contasList = document.getElementById('contas-list');
-            contasList.innerHTML = '';  // Limpa a lista antes de adicionar
-
-            contas.forEach(conta => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${conta.descricao}</td>
-                    <td>R$ ${conta.valor}</td>
-                    <td>${conta.vencimento}</td>
-                    <td>${conta.paga ? 'Paga' : 'Pendente'}</td>
-                    <td>
-                        ${!conta.paga ? 
-                            `<button onclick="marcarComoPaga(${conta.id})">Marcar como paga</button>` : 
-                            `<button onclick="abrirFormularioComprovante(${conta.id})">Enviar Comprovante</button>`
-                        }
-                    </td>
-                `;
-                contasList.appendChild(tr);
-            });
-        }
-
-        // Função para marcar uma conta como paga
-        function marcarComoPaga(id) {
-            const conta = contas.find(conta => conta.id === id);
-            if (conta && !conta.paga) {
-                conta.paga = true;
-                atualizarContas();
-            }
-        }
-
-        // Função para abrir o formulário de envio de comprovante
-        function abrirFormularioComprovante(contaId) {
-            const formulario = document.getElementById('comprovante-upload');
-            formulario.style.display = 'block';
-            // Adiciona a lógica para o envio do comprovante aqui (associando o comprovante à conta)
-            // Você pode armazenar a conta que será relacionada ao comprovante enviado
-            document.getElementById('comprovante-file').setAttribute('data-conta-id', contaId);
-        }
-
-        // Função para enviar o comprovante
-        function enviarComprovante() {
-            const contaId = document.getElementById('comprovante-file').getAttribute('data-conta-id');
-            const fileInput = document.getElementById('comprovante-file');
-            const file = fileInput.files[0];
-
-            if (file && file.type === 'application/pdf') {
-                // Aqui você pode enviar o arquivo para o backend
-                // Simulando que o arquivo foi enviado com sucesso
-                const status = document.getElementById('comprovante-status');
-                status.textContent = 'Comprovante enviado com sucesso para a conta ' + contaId;
+        <div class="container">
+            <div class="container__informacoes">
+                <h1>Minhas Contas</h1>
+                <p>Aqui estão as suas contas pendentes e já pagas.</p>
                 
-                // Para fechar o formulário de upload após o envio
-                fileInput.value = '';  // Limpa o campo de input de arquivo
-                document.getElementById('comprovante-upload').style.display = 'none';
-            } else {
-                alert('Por favor, selecione um arquivo PDF.');
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contas-list">
+                        <!-- As contas serão inseridas aqui dinamicamente -->
+                    </tbody>
+                </table>
+
+                <div class="container__botoes">
+                    <button class="container__botao" id="baixar-comprovantes">Baixar Comprovantes</button>
+                </div>
+
+                <!-- Formulário de upload de comprovante -->
+                <div id="comprovante-upload" style="display:none;">
+                    <h2>Enviar Comprovante de Pagamento</h2>
+                    <input type="file" id="comprovante-file" accept="application/pdf">
+                    <button class="container__botao" onclick="enviarComprovante()">Enviar Comprovante</button>
+                    <p id="comprovante-status" style="color: green;"></p>
+                </div>
+            </div>
+
+            <div class="container__imagem">
+                <img src="img/ia.png" alt="Imagem de IA" class="container__imagem-pessoa" />
+            </div>
+        </div>
+
+        <script>
+            // Simulação de dados do backend (deve vir da API)
+            const contas = [
+                {
+                    id: 1,
+                    descricao: "Conta de luz",
+                    valor: 100,
+                    vencimento: "2025-02-10",
+                    paga: false
+                },
+                {
+                    id: 2,
+                    descricao: "Conta de água",
+                    valor: 50,
+                    vencimento: "2025-02-12",
+                    paga: true
+                }
+            ];
+
+            // Função para atualizar a lista de contas
+            function atualizarContas() {
+                const contasList = document.getElementById('contas-list');
+                contasList.innerHTML = '';  // Limpa a lista antes de adicionar
+
+                contas.forEach(conta => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${conta.descricao}</td>
+                        <td>R$ ${conta.valor}</td>
+                        <td>${conta.vencimento}</td>
+                        <td>${conta.paga ? 'Paga' : 'Pendente'}</td>
+                        <td>
+                            ${!conta.paga ? 
+                                `<button onclick="marcarComoPaga(${conta.id})">Marcar como paga</button>` : 
+                                `<button onclick="abrirFormularioComprovante(${conta.id})">Enviar Comprovante</button>`
+                            }
+                        </td>
+                    `;
+                    contasList.appendChild(tr);
+                });
             }
-        }
 
-        // Função para fazer o download dos comprovantes
-        document.getElementById('baixar-comprovantes').addEventListener('click', () => {
-            alert('Baixando os comprovantes...');
-            // Simulação de download (aqui você pode fazer uma requisição para baixar os arquivos)
-        });
+            // Função para marcar uma conta como paga
+            function marcarComoPaga(id) {
+                const conta = contas.find(conta => conta.id === id);
+                if (conta && !conta.paga) {
+                    conta.paga = true;
+                    atualizarContas();
+                }
+            }
 
-        // Inicializa a lista de contas
-        atualizarContas();
-    </script>
+            // Função para abrir o formulário de envio de comprovante
+            function abrirFormularioComprovante(contaId) {
+                const formulario = document.getElementById('comprovante-upload');
+                formulario.style.display = 'block';
+                // Adiciona a lógica para o envio do comprovante aqui (associando o comprovante à conta)
+                // Você pode armazenar a conta que será relacionada ao comprovante enviado
+                document.getElementById('comprovante-file').setAttribute('data-conta-id', contaId);
+            }
 
-</body>
-</html>
+            // Função para enviar o comprovante
+            function enviarComprovante() {
+                const contaId = document.getElementById('comprovante-file').getAttribute('data-conta-id');
+                const fileInput = document.getElementById('comprovante-file');
+                const file = fileInput.files[0];
+
+                if (file && file.type === 'application/pdf') {
+                    // Aqui você pode enviar o arquivo para o backend
+                    // Simulando que o arquivo foi enviado com sucesso
+                    const status = document.getElementById('comprovante-status');
+                    status.textContent = 'Comprovante enviado com sucesso para a conta ' + contaId;
+                    
+                    // Para fechar o formulário de upload após o envio
+                    fileInput.value = '';  // Limpa o campo de input de arquivo
+                    document.getElementById('comprovante-upload').style.display = 'none';
+                } else {
+                    alert('Por favor, selecione um arquivo PDF.');
+                }
+            }
+
+            // Função para fazer o download dos comprovantes
+            document.getElementById('baixar-comprovantes').addEventListener('click', () => {
+                alert('Baixando os comprovantes...');
+                // Simulação de download (aqui você pode fazer uma requisição para baixar os arquivos)
+            });
+
+            // Inicializa a lista de contas
+            atualizarContas();
+        </script>
+
+    </body>
+    </html>
