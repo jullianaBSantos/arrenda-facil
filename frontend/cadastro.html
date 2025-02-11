@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cadastro</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="container__informacoes">
+            <h1>Crie sua conta</h1>
+            <p>Preencha os campos abaixo para se cadastrar.</p>
+
+            <input type="text" id="usuario" placeholder="Usuário" class="container__input">
+            <input type="password" id="senha" placeholder="Senha" class="container__input">
+            <input type="password" id="confirmarSenha" placeholder="Confirme sua senha" class="container__input">
+
+            <select id="tipo-usuario" class="container__input">
+                <option value="inquilino">Inquilino</option>
+                <option value="senhorio">Senhorio</option>
+            </select>
+            
+            <div class="container__botoes">
+                <button class="container__botao" onclick="cadastrar()">Cadastrar</button>
+            </div>
+
+            <p class="texto__cadastro">Já tem uma conta? <a href="index.html">Clique aqui</a> para fazer login.</p>
+        </div>
+
+        <div class="container__imagem">
+            <img src="img/ia.png" alt="Imagem de IA" class="container__imagem-pessoa" />
+        </div>
+    </div>
+
+    <script>
+        async function cadastrar() {
+            const usuario = document.getElementById("usuario").value;
+            const senha = document.getElementById("senha").value;
+            const confirmarSenha = document.getElementById("confirmarSenha").value;
+            const tipoUsuario = document.getElementById("tipo-usuario").value;
+
+            if (!usuario || !senha || !confirmarSenha) {
+                alert("Preencha todos os campos!");
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                alert("As senhas não coincidem!");
+                return;
+            }
+
+            const dados = {
+                username: usuario,
+                password: senha,
+                role: tipoUsuario
+            };
+
+            try {
+                const resposta = await fetch("http://localhost:8000/register/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dados)
+                });
+
+                const resultado = await resposta.json();
+
+                if (resposta.ok) {
+                    alert("Cadastro realizado com sucesso!");
+                    window.location.href = "index.html";
+                } else {
+                    alert(resultado.detail || "Erro ao cadastrar.");
+                }
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Erro ao conectar ao servidor.");
+            }
+        }
+    </script>
+
+</body>
+</html>
