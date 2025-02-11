@@ -7,7 +7,7 @@
         const password = document.getElementById('password').value;
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/login/', {
+            const response = await fetch('http://127.0.0.1:5000/login/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
@@ -36,7 +36,7 @@
         const role = document.getElementById('role').value;
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/register/', {
+            const response = await fetch('http://127.0.0.1:5000/register/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password, role }),
@@ -62,7 +62,7 @@
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/contas/', {
+            const response = await fetch('http://127.0.0.1:5000/contas/', {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` },
             });
@@ -100,7 +100,7 @@
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/contas/${contaId}/pagar`, {
+            const response = await fetch(`http://127.0.0.1:5000/contas/${contaId}/pagar`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
