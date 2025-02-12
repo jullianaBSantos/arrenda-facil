@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 # Configuração do banco de dados MySQL
-DATABASE_URL = "mysql+pymysql://root:300275609aB@@localhost:3306/arrendafacil"
+DATABASE_URL = "mysql+pymysql://root@localhost:3306/arrendafacil"
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
