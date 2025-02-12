@@ -167,3 +167,4 @@ def upload_comprovante(file: UploadFile = File(...)):
         buffer.write(file.file.read())
     
     return {"msg": "Comprovante enviado com sucesso", "file_location": file_location}
+
